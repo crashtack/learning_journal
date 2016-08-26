@@ -10,6 +10,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 
 requires = [
     'pyramid',
+    'pyramid_ipython',
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
     'pyramid_tm',
@@ -23,6 +24,8 @@ tests_require = [
     'WebTest >= 1.3.1',  # py3 compat
     'pytest',  # includes virtualenv
     'pytest-cov',
+    'pytest-watch',
+    'tox',
     ]
 
 setup(name='learing_journal',
@@ -50,6 +53,6 @@ setup(name='learing_journal',
       [paste.app_factory]
       main = learing_journal:main
       [console_scripts]
-      initialize_learing_journal_db = learing_journal.scripts.initializedb:main
+      init_db = learing_journal.scripts.initializedb:main
       """,
       )

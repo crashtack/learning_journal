@@ -3,6 +3,7 @@ from sqlalchemy import (
     Index,
     Integer,
     Text,
+    UnicodeText
 )
 
 from .meta import Base
@@ -11,7 +12,7 @@ from .meta import Base
 class MyModel(Base):
     __tablename__ = 'models'
     id = Column(Integer, primary_key=True)
-    name = Column(Text)
+    name = Column(UnicodeText)
     value = Column(Integer)
 
 
