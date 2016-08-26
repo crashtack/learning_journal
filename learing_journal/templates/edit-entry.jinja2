@@ -1,0 +1,15 @@
+{% extends "layout.jinja2" %}
+{% block body %}
+
+<div class="jumbotron">
+  <!-- Entry ID: {{ entry.id }} -->
+  <h3>edit-entry.jinja2</h3>
+  <h1>Edit Journal Entry {{ entry.id }}</h1>
+  <div class="form-group">
+    <label for="comment">Comment:</label>
+    <textarea class="form-control" rows="5" id="comment" placeholder="{{ entry.body  | safe }}"></textarea>
+  </div>
+  <h2><a href='/'>Back to Home</a></h2>
+</div>
+
+{% endblock %}
