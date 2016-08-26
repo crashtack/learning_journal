@@ -1,0 +1,3 @@
+[run]
+source = learing_journal
+omit = learing_journal/test*
