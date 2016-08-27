@@ -1,6 +1,6 @@
 from pyramid.response import Response
 from pyramid.view import view_config
-from datetime import datetime
+import time
 from sqlalchemy.exc import DBAPIError
 
 from ..models import MyModel
@@ -42,11 +42,14 @@ def home(request):
         print()
         title = request.POST['title']
         body = request.POST['body']
-        now = datetime.now()
+        month = time.strftime('%B')
+        day = time.strftime('%d')
+        date = '{} {}'.format(month, day)
         print('title: %s' % title)
         print('body: %s' % body)
-        print('time: {} {}'.format(now.month, now.day))
-
+        print('time: {} {}'.format(month, day))
+        new = MyModel(title=title, body=body, date=date)
+        request.dbsession.add(new)
     try:
         query = request.dbsession.query(MyModel)
         all_entries = query.all()
