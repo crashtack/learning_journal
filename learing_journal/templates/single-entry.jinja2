@@ -1,14 +1,14 @@
 {% extends "layout.jinja2" %}
 {% block body %}
 
-<div class="jumbotron">
-  <h1>single-entry.jinja2</h1>
-  <h1>{{ entry.title }}</h1>
-  <p>{{ entry.creation_date }}</p>
-  <hr>
-  <p>{{ entry.body | safe }}</P>
-  <h2><a href='/'>Back to Home</a></h2>
-  <h2><a href='{{request.route_url('update',id=entry.id)}}'>Edit Entry</a></h2>
-</div>
+  <div class="jumbotron">
+    <h1>single-entry.jinja2</h1>
+    <h1>{{ single_entry.title }}</h1>
+    <p>{{ single_entry.date }}</p>
+    <hr>
+    <p>{{ single_entry.body | safe }}</P>
+    <h2><a href='/'>Back to Home</a></h2>
+    <h2><a href='{{request.route_url('update',id=single_entry.id)}}'>Edit Entry</a></h2>
+  </div>
 
 {% endblock %}

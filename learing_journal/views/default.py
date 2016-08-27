@@ -1,6 +1,6 @@
 from pyramid.response import Response
 from pyramid.view import view_config
-
+from datetime import datetime
 from sqlalchemy.exc import DBAPIError
 
 from ..models import MyModel
@@ -34,31 +34,39 @@ ENTRIES = [
 ]
 
 
-# @view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
-# def my_view(request):
-#     try:
-#         query = request.dbsession.query(MyModel)
-#         one = query.filter(MyModel.name == 'one').first()
-#     except DBAPIError:
-#         return Response(db_err_msg, content_type='text/plain', status=500)
-#     return {'one': one, 'project': 'learing_journal'}
-
-
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home(request):
+    if request.method == 'POST':
+        print()
+        print('request: {}'.format(request))
+        print()
+        title = request.POST['title']
+        body = request.POST['body']
+        now = datetime.now()
+        print('title: %s' % title)
+        print('body: %s' % body)
+        print('time: {} {}'.format(now.month, now.day))
+
     try:
         query = request.dbsession.query(MyModel)
         all_entries = query.all()
+        print('all_entries query: {}'.format(all_entries))
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'entries': all_entries, 'poject': 'learning_journal'}
 
 
 @view_config(route_name='create', renderer='templates/new-entry.jinja2')
-def list_(request):
+def create(request):
+    return {'poject': 'learning_journal'}
+
+
+@view_config(route_name='update', renderer='templates/edit-entry.jinja2')
+@view_config(route_name='detail', renderer='templates/single-entry.jinja2')
+def detail(request):
     try:
         query = request.dbsession.query(MyModel)
-        single_entry = query.filter(MyModel.id == int(request.matchdict['id']))
+        single_entry = query.filter_by(id=request.matchdict['id']).first()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'single_entry': single_entry, 'poject': 'learning_journal'}

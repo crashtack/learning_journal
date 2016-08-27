@@ -2,12 +2,12 @@
 {% block body %}
 
 <div class="jumbotron">
-  <!-- Entry ID: {{ entry.id }} -->
+  <!-- Entry ID: {{ single_entry.id }} -->
   <h3>edit-entry.jinja2</h3>
-  <h1>Edit Journal Entry {{ entry.id }}</h1>
+  <h2>Edit Journal Entry {{ single_entry.id }}</h2>
   <div class="form-group">
-    <label for="comment">Comment:</label>
-    <textarea class="form-control" rows="5" id="comment" placeholder="{{ entry.body  | safe }}"></textarea>
+    <label for="comment">Journal Body:</label>
+    <textarea class="form-control" rows="5" id="body">{{ single_entry.body  | safe }}</textarea>
   </div>
   <h2><a href='/'>Back to Home</a></h2>
 </div>
