@@ -36,7 +36,7 @@ def main(argv=sys.argv):
     engine = get_engine(settings)
     Base.metadata.create_all(engine)
 
-    The below lines populates the database initialy
+    # The below lines populates the database initialy
 
     session_factory = get_session_factory(engine)
 
