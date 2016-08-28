@@ -44,16 +44,16 @@ def home(request):
         body = request.POST['body']
         month = time.strftime('%B')
         day = time.strftime('%d')
-        date = '{} {}'.format(month, day)
+        year = time.strftime('%Y')
+        date = '{} {}, {}'.format(month, day, year)
         print('title: %s' % title)
         print('body: %s' % body)
-        print('time: {} {}'.format(month, day))
+        print('date: {}'.format(date))
         new = MyModel(title=title, body=body, date=date)
         request.dbsession.add(new)
     try:
         query = request.dbsession.query(MyModel)
         all_entries = query.all()
-        print('all_entries query: {}'.format(all_entries))
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'entries': all_entries, 'poject': 'learning_journal'}
