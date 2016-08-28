@@ -3,12 +3,10 @@ import transaction
 
 from pyramid import testing
 
-from ..models import (
-    MyModel,
-    get_engine,
-    get_session_factory,
-    get_tm_session,
-)
+from ..models.mymodel import MyModel
+from ..models import get_engine
+from ..models import get_session_factory
+from ..models import get_tm_session
 from ..models.meta import Base
 
 
