@@ -88,3 +88,73 @@ def test_lists_title(new_session):
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
         assert entry.title == 'test1'
+
+
+def test_lists_body(new_session):
+    '''tests wether list() pull out correct data from db'''
+    from .views.default import home
+    new_session.add(MyModel(title='test1', body='test2', date='test3'))
+    new_session.flush()
+    result = home(dummy_http_request(new_session))
+    for entry in result['entries']:
+        assert entry.body == 'test2'
+
+
+def test_lists_date(new_session):
+    '''tests wether list() pull out correct data from db'''
+    from .views.default import home
+    new_session.add(MyModel(title='test1', body='test2', date='test3'))
+    new_session.flush()
+    result = home(dummy_http_request(new_session))
+    for entry in result['entries']:
+        assert entry.date == 'test3'
+
+
+def test_create(new_session):
+    """
+    Tests whether create() returns  {'poject': 'learning_journal'}
+    on 'GET' request.
+    """
+    from .views.default import create
+    assert create(dummy_http_request(new_session)) == \
+        {'poject': 'learning_journal'}
+
+
+def test_add_new_model(new_session):
+    """
+    Test if add_new_model() (a helper function) creates a new model.
+    Check this using lists().
+    """
+    from .views.default import home
+    home(dummy_http_request_post('a', 'b', 'c', new_session))
+    result = home(dummy_http_request(new_session))
+    for entry in result['entries']:
+        assert entry.title == 'a'
+
+
+def test_create_error(new_session):
+    """
+    Test if an error msg shows up on the page
+    in case an empty entry on the new_entry page is submitted.
+    """
+    from .views.default import home
+    result = home(dummy_http_request_post('', '', '', new_session))
+    assert result['error_msg'] == "Can't submit empry entry"
+
+
+def test_detail_get(new_session):
+    """Test if correct details are returned upon calling detail()."""
+    from .views.default import detail
+    new_session.add(MyModel(title='test1', body='test2', date='test3'))
+    new_session.flush()
+    request = dummy_http_request(new_session)
+    request.matchdict['id'] = 1
+    result = detail(request)
+    assert result['single_entry'].title == 'test1'
+
+
+#
+#
+#
+#
+#

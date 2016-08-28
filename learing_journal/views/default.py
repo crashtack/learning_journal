@@ -37,20 +37,18 @@ ENTRIES = [
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home(request):
     if request.method == 'POST':
-        print()
-        print('request: {}'.format(request))
-        print()
-        title = request.POST['title']
-        body = request.POST['body']
-        month = time.strftime('%B')
-        day = time.strftime('%d')
-        year = time.strftime('%Y')
-        date = '{} {}, {}'.format(month, day, year)
-        print('title: %s' % title)
-        print('body: %s' % body)
-        print('date: {}'.format(date))
-        new = MyModel(title=title, body=body, date=date)
-        request.dbsession.add(new)
+        if request.POST['title'] != '' or request.POST['body'] != '':
+            title = request.POST['title']
+            body = request.POST['body']
+            month = time.strftime('%B')
+            day = time.strftime('%d')
+            year = time.strftime('%Y')
+            date = '{} {}, {}'.format(month, day, year)
+            new = MyModel(title=title, body=body, date=date)
+            request.dbsession.add(new)
+        else:
+            error_msg = "Can't submit empry entry"
+            return {'error_msg': error_msg}
     try:
         query = request.dbsession.query(MyModel)
         all_entries = query.all()
