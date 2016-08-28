@@ -153,6 +153,37 @@ def test_detail_get(new_session):
     assert result['single_entry'].title == 'test1'
 
 
+# Testing the templates
+# doen't work
+# ROUTES = [
+#     ('/', b'<p>David Banks</p>'),
+#     # ('/journal/new-entry', b'<h1>new-entry.jinja2</h1>'),
+#     # ('/journal/1', b'<h1>Day 1</h1>'),
+#     # ('/journal/2', b'<h1>Day 2</h1>'),
+#     # ('/journal/3', b'<h1>Day 3</h1>'),
+#     # ('/journal/4', b'<h1>Day 4</h1>'),
+#     # ('/journal/1/edit-entry', b'Entry ID: 1'),
+#     # ('/journal/2/edit-entry', b'Entry ID: 2'),
+#     # ('/journal/3/edit-entry', b'Entry ID: 3'),
+#     # ('/journal/4/edit-entry', b'Entry ID: 4'),
+# ]
+#
+#
+# @pytest.fixture()
+# def testapp():
+#     '''testapp fixture'''
+#     from learing_journal import main
+#     app = main({})
+#     from webtest import TestApp
+#     return TestApp(app)
+#
+#
+# @pytest.mark.parametrize('path, content', ROUTES)
+# def test_rendered_layouts(path, content, testapp):
+#     '''tests that a particular HTML binary string is in the response body'''
+#     response = testapp.get(path, status=200)
+#     assert content in response.body
+
 #
 #
 #
