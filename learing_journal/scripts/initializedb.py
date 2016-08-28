@@ -36,12 +36,12 @@ def main(argv=sys.argv):
     engine = get_engine(settings)
     Base.metadata.create_all(engine)
 
-    # The below lines populates the database initialy
-    #
-    # session_factory = get_session_factory(engine)
-    #
-    # with transaction.manager:
-    #     dbsession = get_tm_session(session_factory, transaction.manager)
-    #     for entry in ENTRIES:
-    #         row = MyModel(title=entry['title'], body=entry['body'], date=entry['date'], id=entry['id'])
-    #         dbsession.add(row)
+    The below lines populates the database initialy
+
+    session_factory = get_session_factory(engine)
+
+    with transaction.manager:
+        dbsession = get_tm_session(session_factory, transaction.manager)
+        for entry in ENTRIES:
+            row = MyModel(title=entry['title'], body=entry['body'], date=entry['date'], id=entry['id'])
+            dbsession.add(row)
