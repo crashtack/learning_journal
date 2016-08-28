@@ -1,0 +1,19 @@
+{% extends "layout.jinja2" %}
+{% block body %}
+
+    <div class="jumbotron">
+      <h2>The list view points here! home.html</h2>
+      {% for entry in entries %}
+          <article>
+              <h3><a href="{{request.route_url('detail',id=entry.id)}}">{{ entry.title }}</a></h3>
+              <!-- <hr /> -->
+              <h5>Created: <strong>{{ entry.date }}</strong></h5>
+              <p>{{ entry.body | safe }}</p>
+              <br/>
+          </article>
+      {% endfor %}
+    </dir>
+
+    <h2><a href="{{request.route_url('create')}}">New Entry</a></h2>
+
+{% endblock %}

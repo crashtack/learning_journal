@@ -16,7 +16,7 @@ from ..models import (
     get_tm_session,
     )
 from ..models import MyModel
-
+from ..views.default import ENTRIES
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -36,10 +36,12 @@ def main(argv=sys.argv):
     engine = get_engine(settings)
     Base.metadata.create_all(engine)
 
+    # The below lines populates the database initialy
+
     session_factory = get_session_factory(engine)
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-
-        model = MyModel(name='one', value=1)
-        dbsession.add(model)
+        for entry in ENTRIES:
+            row = MyModel(title=entry['title'], body=entry['body'], date=entry['date'], id=entry['id'])
+            dbsession.add(row)
