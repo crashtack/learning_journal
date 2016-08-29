@@ -40,11 +40,15 @@ ENTRIES = [
     # },
 ]
 
-
+# TODO: Add a function that handles the POST request.
+#       submitting an empty body or title generates error
+#       but does not send you back home or to a usefull page
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home(request):
     if request.method == 'POST':
-        if request.POST['title'] != '' or request.POST['body'] != '':
+        print('Title: {}'.format(request.POST['title']))
+        print('Body: {}'.format(request.POST['body']))
+        if request.POST['title'] != '' and request.POST['body'] != '':
             title = request.POST['title']
             body = request.POST['body']
             month = time.strftime('%B')
