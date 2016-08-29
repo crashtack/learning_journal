@@ -40,6 +40,7 @@ ENTRIES = [
     # },
 ]
 
+
 # TODO: Add a function that handles the POST request.
 #       submitting an empty body or title generates error
 #       but does not send you back home or to a usefull page
