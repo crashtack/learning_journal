@@ -34,4 +34,15 @@ def includeme(config):
     config.set_root_factory(MyRoot)
 
 
-def check_credentials()
+def check_credentials(username, password):
+    stored_username = os.environ.get('AUTH_USERNAME', '')
+    stored_password = os.environ.get('AUTH_PASSWORD', '')
+    is_authenticated = False
+    if stored_username and stored_password:
+        if username == stored_username:
+            try:
+                is_authenticated = pwd_context.verify(password, stored_password)
+            except ValueError:
+                # ValueError is rased if teh stored password is not hashed
+                pass
+    return is_authenticated
