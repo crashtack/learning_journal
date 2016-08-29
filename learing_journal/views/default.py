@@ -9,7 +9,7 @@ from ..models import MyModel
 ENTRIES = [
     {
         "title": "Day 1",
-        "id": 1,
+        "id": 4,
         "date": "August 20, 2016",
         "body": "Today I learned about <strong>Pyramid</strong>."
     },
@@ -49,7 +49,7 @@ def home(request):
             month = time.strftime('%B')
             day = time.strftime('%d')
             year = time.strftime('%Y')
-            date = '{} {}, {}'.format(month, day, year)
+            date = b'{} {}, {}'.format(month, day, year)
             new = MyModel(title=title, body=body, date=date)
             request.dbsession.add(new)
         else:
