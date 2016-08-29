@@ -50,10 +50,8 @@ def home(request):
             month = time.strftime('%B')
             day = time.strftime('%d')
             year = time.strftime('%Y')
-
             date = u'{} {}, {}'.format(month, day, year)
-            byte_date = date.encode('utf-8')
-            new = MyModel(title=title, body=body, date=byte_date)
+            new = MyModel(title=title, body=body, date=date)
             request.dbsession.add(new)
         else:
             error_msg = "Can't submit empry entry"
