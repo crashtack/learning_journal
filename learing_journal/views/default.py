@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from pyramid.response import Response
 from pyramid.view import view_config
 import time
@@ -49,8 +50,10 @@ def home(request):
             month = time.strftime('%B')
             day = time.strftime('%d')
             year = time.strftime('%Y')
-            date = b'{} {}, {}'.format(month, day, year)
-            new = MyModel(title=title, body=body, date=date)
+
+            date = u'{} {}, {}'.format(month, day, year)
+            byte_date = date.encode('utf-8')
+            new = MyModel(title=title, body=body, date=byte_date)
             request.dbsession.add(new)
         else:
             error_msg = "Can't submit empry entry"
