@@ -41,9 +41,15 @@ ENTRIES = [
 ]
 
 
+@view_config(route_name='private', renderer='string', permission='secret')
+def private(request):
+    return "I am a private view"
+
+
 # TODO: Add a function that handles the POST request.
 #       submitting an empty body or title generates error
 #       but does not send you back home or to a usefull page
+# TODO: add if request.method == 'DELETE':
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home(request):
     if request.method == 'POST':
