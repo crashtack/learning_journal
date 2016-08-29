@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from pyramid.response import Response
 from pyramid.view import view_config
 import time
@@ -9,7 +10,7 @@ from ..models import MyModel
 ENTRIES = [
     {
         "title": "Day 1",
-        "id": 1,
+        "id": 4,
         "date": "August 20, 2016",
         "body": "Today I learned about <strong>Pyramid</strong>."
     },
@@ -22,28 +23,39 @@ ENTRIES = [
     {
         "title": "Day 3",
         "id": 3,
-        "date": "August 22, 2016",
-        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
+        "date": "August 28, 2016",
+        "body": "Today I figured out how to deploy a postgresql database to Heroku",
     },
-    {
-        "title": "Day 4",
-        "id": 4,
-        "date": "August 23, 2016",
-        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
-    },
+    # {
+    #     "title": "Day 4",
+    #     "id": 4,
+    #     "date": "August 23, 2016",
+    #     "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
+    # },
+    # {
+    #     "title": "Day 5",
+    #     "id": 5,
+    #     "date": "August 24, 2016",
+    #     "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
+    # },
 ]
 
 
+# TODO: Add a function that handles the POST request.
+#       submitting an empty body or title generates error
+#       but does not send you back home or to a usefull page
 @view_config(route_name='home', renderer='templates/home.jinja2')
 def home(request):
     if request.method == 'POST':
-        if request.POST['title'] != '' or request.POST['body'] != '':
+        print('Title: {}'.format(request.POST['title']))
+        print('Body: {}'.format(request.POST['body']))
+        if request.POST['title'] != '' and request.POST['body'] != '':
             title = request.POST['title']
             body = request.POST['body']
             month = time.strftime('%B')
             day = time.strftime('%d')
             year = time.strftime('%Y')
-            date = '{} {}, {}'.format(month, day, year)
+            date = u'{} {}, {}'.format(month, day, year)
             new = MyModel(title=title, body=body, date=date)
             request.dbsession.add(new)
         else:
