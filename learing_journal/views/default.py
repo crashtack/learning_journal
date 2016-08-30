@@ -78,7 +78,6 @@ def home(request):
         # import pdb; pdb.set_trace()
         query = request.dbsession.query(MyModel)
         all_entries = query.order_by(desc(MyModel.date)).all()
-        # all_entries = query.all()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'entries': all_entries}
