@@ -9,12 +9,12 @@
     {% if data %}
     <h1>{{ data.name }}</h1>
     {% endif %}
-    <form action="{{ request.route_url('home') }}" method="POST">
+    <form action="{{ request.route_url('create') }}" method="POST">
       <label for="title">New Journal Title</label><br/>
-      <textarea class="form-control" rows="1" maxlength="100" id="title" name="title" placeholder="Enter Journal Title"></textarea>
+      <textarea class="form-control" rows="1" maxlength="100" id="title" name="title" placeholder="Enter Journal Title">{{ title | safe }}</textarea>
       <br/>
       <label for="title">Journal Text</label><br/>
-      <textarea class="form-control" rows="15" id="body" name="body" placeholder="Enter your new journal text."></textarea>
+      <textarea class="form-control" rows="15" id="body" name="body" placeholder="Enter your new journal text.">{{ body | safe }}</textarea>
       <br/>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>

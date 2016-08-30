@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from pyramid.response import Response
 from pyramid.view import view_config
 import time
+import datetime
 from sqlalchemy.exc import DBAPIError
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
@@ -71,24 +72,32 @@ def logout(request):
 #       submitting an empty body or title generates error
 #       but does not send you back home or to a usefull page
 # TODO: add if request.method == 'DELETE':
+# TODO: change date string creation to DATETIME
+# TODO: add sort by date retreval
+# query.orderby(MyModel.date).all()     .all() is the last thing to be done
+# from sqlalchemy import desc
+# query.order_by(desc(MyModel.date)).all()   # try this
+# TODO: added an date_last_updated field
+
 @view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
 def home(request):
-    if request.method == 'POST':
-        print('Title: {}'.format(request.POST['title']))
-        print('Body: {}'.format(request.POST['body']))
-        if request.POST['title'] != '' and request.POST['body'] != '':
-            title = request.POST['title']
-            body = request.POST['body']
-            month = time.strftime('%B')
-            day = time.strftime('%d')
-            year = time.strftime('%Y')
-            date = u'{} {}, {}'.format(month, day, year)
-            new = MyModel(title=title, body=body, date=date)
-            request.dbsession.add(new)
-        else:
-            error_msg = "Can't submit empry entry"
-            return {'error_msg': error_msg}
+    # if request.method == 'POST':
+    #     print('Title: {}'.format(request.POST['title']))
+    #     print('Body: {}'.format(request.POST['body']))
+    #     if request.POST['title'] != '' and request.POST['body'] != '':
+    #         title = request.POST['title']
+    #         body = request.POST['body']
+    #         month = time.strftime('%B')
+    #         day = time.strftime('%d')
+    #         year = time.strftime('%Y')
+    #         date = u'{} {}, {}'.format(month, day, year)
+    #         new = MyModel(title=title, body=body, date=date)
+    #         request.dbsession.add(new)
+    #     else:
+    #         error_msg = "Can't submit empry entry"
+    #         return {'error_msg': error_msg}
     try:
+        # import pdb; pdb.set_trace()
         query = request.dbsession.query(MyModel)
         all_entries = query.all()
     except DBAPIError:
@@ -96,9 +105,39 @@ def home(request):
     return {'entries': all_entries, 'poject': 'learning_journal'}
 
 
-@view_config(route_name='create', renderer='templates/new-entry.jinja2', permission='secret')
+# TODO: update view to take in the title, body, error and display properly
+#       if the user entered a body, but no title we want the body to show
+#       with a message to input a Title.
+@view_config(route_name='create',
+             renderer='templates/new-entry.jinja2',
+             permission='secret')
 def create(request):
-    return {'poject': 'learning_journal'}
+    title = body = error = ''
+    # if request.method == 'POST':
+    #     title = request.params.get('title', '')
+    #     body = request.params.get('body', '')
+    #     date = datetime.datetime.now()
+    #     if not body or not title:
+    #         error = 'title and body are both requiered'
+    #     else:
+    #         new = MyModel(title=title, body=body, date=date)
+    #         request.dbsession.add(new)
+    #         return HTTPFound(location=request.route_url('home'))
+
+    if request.method == 'POST':
+        print('Title: {}'.format(request.POST['title']))
+        print('Body: {}'.format(request.POST['body']))
+        if request.POST['title'] != '' and request.POST['body'] != '':
+            title = request.POST['title']
+            body = request.POST['body']
+            date = datetime.datetime.now()
+            new = MyModel(title=title, body=body, date=date)
+            request.dbsession.add(new)
+            return HTTPFound(location=request.route_url('home'))
+        else:
+            error = "Can't submit empry entry"
+            return {'error_msg': error_msg}
+    return {'title': title, 'body': body, 'error': error}
 
 
 @view_config(route_name='update', renderer='templates/edit-entry.jinja2', permission='view')
