@@ -18,4 +18,6 @@ class MyModel(Base):
     date = Column(Unicode)
     body = Column(UnicodeText)
 
-Index('my_index', MyModel.id, unique=True, mysql_length=255)
+
+# TODO: test the unique=True statement
+Index('my_index', MyModel.title, unique=True, mysql_length=255)
