@@ -6,6 +6,8 @@ from sqlalchemy.exc import DBAPIError
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
 from test_transactions.security import check_credentials
+from pyramid.security import NO_PERMISSION_REQUIRED
+
 from ..models import MyModel
 
 
@@ -48,7 +50,7 @@ def private(request):
     return "I am a private view"
 
 
-@view_config(route_name='login', renderer='tmplates/login.hinja2')
+@view_config(route_name='login', renderer='tmplates/login.hinja2', permission=NO_PERMISSION_REQUIRED)
 def login(request):
     if request.method == 'POST':
         username = request.params.get('username', '')
