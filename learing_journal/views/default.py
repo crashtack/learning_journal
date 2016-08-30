@@ -4,6 +4,7 @@ from pyramid.view import view_config
 import time
 import datetime
 from sqlalchemy.exc import DBAPIError
+from sqlalchemy import desc
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
 from ..security import check_credentials
@@ -68,41 +69,19 @@ def logout(request):
     return HTTPFound(request.route_url('home'), headers=headers)
 
 
-# TODO: Add a function that handles the POST request.
-#       submitting an empty body or title generates error
-#       but does not send you back home or to a usefull page
+# TODO: test the routes
 # TODO: add if request.method == 'DELETE':
-# TODO: change date string creation to DATETIME
-# TODO: add sort by date retreval
-# query.orderby(MyModel.date).all()     .all() is the last thing to be done
-# from sqlalchemy import desc
-# query.order_by(desc(MyModel.date)).all()   # try this
 # TODO: added an date_last_updated field
-
 @view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
 def home(request):
-    # if request.method == 'POST':
-    #     print('Title: {}'.format(request.POST['title']))
-    #     print('Body: {}'.format(request.POST['body']))
-    #     if request.POST['title'] != '' and request.POST['body'] != '':
-    #         title = request.POST['title']
-    #         body = request.POST['body']
-    #         month = time.strftime('%B')
-    #         day = time.strftime('%d')
-    #         year = time.strftime('%Y')
-    #         date = u'{} {}, {}'.format(month, day, year)
-    #         new = MyModel(title=title, body=body, date=date)
-    #         request.dbsession.add(new)
-    #     else:
-    #         error_msg = "Can't submit empry entry"
-    #         return {'error_msg': error_msg}
     try:
         # import pdb; pdb.set_trace()
         query = request.dbsession.query(MyModel)
-        all_entries = query.all()
+        all_entries = query.order_by(desc(MyModel.date)).all()
+        # all_entries = query.all()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'entries': all_entries, 'poject': 'learning_journal'}
+    return {'entries': all_entries}
 
 
 # TODO: update view to take in the title, body, error and display properly
@@ -113,42 +92,43 @@ def home(request):
              permission='secret')
 def create(request):
     title = body = error = ''
-    # if request.method == 'POST':
-    #     title = request.params.get('title', '')
-    #     body = request.params.get('body', '')
-    #     date = datetime.datetime.now()
-    #     if not body or not title:
-    #         error = 'title and body are both requiered'
-    #     else:
-    #         new = MyModel(title=title, body=body, date=date)
-    #         request.dbsession.add(new)
-    #         return HTTPFound(location=request.route_url('home'))
 
     if request.method == 'POST':
-        print('Title: {}'.format(request.POST['title']))
-        print('Body: {}'.format(request.POST['body']))
-        if request.POST['title'] != '' and request.POST['body'] != '':
-            title = request.POST['title']
-            body = request.POST['body']
+        title = request.POST['title']
+        body = request.POST['body']
+        print('\nTitle: {}'.format(title))
+        print('Body: {}\n'.format(body))
+
+        if title != '' and body != '':
             date = datetime.datetime.now()
-            new = MyModel(title=title, body=body, date=date)
+            date_last_updated = datetime.datetime.now()
+            new = MyModel(title=title, body=body, date=date,
+                          date_last_updated=date_last_updated)
             request.dbsession.add(new)
             return HTTPFound(location=request.route_url('home'))
         else:
-            error = "Can't submit empry entry"
-            return {'error_msg': error_msg}
+            error = "Can't submit empty entry"
+            return {'title': title, 'body': body, 'error': error}
     return {'title': title, 'body': body, 'error': error}
 
 
+# TODO: refactor this so it works, it's currently unfinished
 @view_config(route_name='update', renderer='templates/edit-entry.jinja2', permission='view')
 @view_config(route_name='detail', renderer='templates/single-entry.jinja2', permission='secret')
 def detail(request):
+    '''handles the GET and POST method for edit-entry and single-entry'''
+
     try:
         query = request.dbsession.query(MyModel)
         single_entry = query.filter_by(id=request.matchdict['id']).first()
+        if request.method == 'POST':
+            single_entry.title = request.POST['title']
+            single_entry.body = request.POST['body']
+            # single_entry.date_last_updated = datetime.datetime.now()
+            return HTTPFound(location=request.route_url('home'))
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'single_entry': single_entry, 'poject': 'learning_journal'}
+    return {'single_entry': single_entry}
 
 
 db_err_msg = """\

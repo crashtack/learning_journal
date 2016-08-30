@@ -6,8 +6,8 @@
   <!-- TODO: Wrap the back to home link in a button -->
   <h2><a href='/'>Back to Home</a></h2>
   <div class="form-group">
-    {% if data %}
-    <h1>{{ data.name }}</h1>
+    {% if error %}
+      <div class="alert alert-danger" role="alert">{{ error }}</div>
     {% endif %}
     <form action="{{ request.route_url('create') }}" method="POST">
       <label for="title">New Journal Title</label><br/>

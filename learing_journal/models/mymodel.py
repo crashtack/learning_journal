@@ -6,6 +6,7 @@ from sqlalchemy import (
     UnicodeText,
     Unicode,
     Date,
+    DateTime,
 )
 
 from .meta import Base
@@ -16,8 +17,9 @@ class MyModel(Base):
     __tablename__ = 'models'
     id = Column(Integer, primary_key=True)
     title = Column(Unicode)
-    date = Column(Unicode)      # date = Column(DATETIME)
+    date = Column(DateTime)      # date = Column(DATETIME)
     body = Column(UnicodeText)
+    date_last_updated = Column(DateTime)
 
 
 # TODO: test the unique=True statement
