@@ -62,7 +62,7 @@ def login(request):
 
 
 @view_config(route_name='logout', renderer='tmplates/login.hinja2')
-def login(request):
+def logout(request):
     headers = forget(request)
     return HTTPFound(request.route_url('home'), headers=headers)
 
