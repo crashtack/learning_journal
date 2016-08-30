@@ -107,7 +107,7 @@ def create(request):
             request.dbsession.add(new)
             return HTTPFound(location=request.route_url('home'))
         else:
-            error = "Can't submit empty entry"
+            error = "You are missing the Title or the Body"
             return {'title': title, 'body': body, 'error': error}
     return {'title': title, 'body': body, 'error': error}
 

@@ -2,9 +2,9 @@
 {% block body %}
 
   <div class="jumbotron">
-    <h1>single-entry.jinja2</h1>
+    <h4>single-entry.jinja2</h4>
     <h1>{{ single_entry.title }}</h1>
-    <p>{{ single_entry.date }}</p>
+    <p>{{ single_entry.date.strftime('%B %d, %Y') }}</p>
     <hr>
     <p>{{ single_entry.body | safe }}</P>
     <h2><a href='/'>Back to Home</a></h2>
