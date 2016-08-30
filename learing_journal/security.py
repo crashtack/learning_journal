@@ -7,7 +7,6 @@ from passlib.apps import custom_app_context as pwd_context
 # https://pythonhosted.org/passlib/new_app_quickstart.html
 
 
-
 class MyRoot(object):
 
     def __init__(self, request):

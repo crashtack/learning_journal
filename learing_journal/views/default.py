@@ -3,7 +3,9 @@ from pyramid.response import Response
 from pyramid.view import view_config
 import time
 from sqlalchemy.exc import DBAPIError
-
+from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember, forget
+from test_transactions.security import check_credentials
 from ..models import MyModel
 
 
@@ -46,11 +48,29 @@ def private(request):
     return "I am a private view"
 
 
+@view_config(route_name='login', renderer='tmplates/login.hinja2')
+def login(request):
+    if request.method == 'POST':
+        username = request.params.get('username', '')
+        password = request.params.get('password', '')
+        if check_credentials(username, password):
+            headers = remember(request, username)
+            return HTTPFound(location=request.route_url('home'), headers=headers)
+    return {}
+
+
+@view_config(route_name='logout', renderer='tmplates/login.hinja2')
+def login(request):
+    headers = forget(request)
+    return HTTPFound(request.route_url('home'), headers=headers)
+
+
+
 # TODO: Add a function that handles the POST request.
 #       submitting an empty body or title generates error
 #       but does not send you back home or to a usefull page
 # TODO: add if request.method == 'DELETE':
-@view_config(route_name='home', renderer='templates/home.jinja2')
+@view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
 def home(request):
     if request.method == 'POST':
         print('Title: {}'.format(request.POST['title']))
@@ -75,13 +95,13 @@ def home(request):
     return {'entries': all_entries, 'poject': 'learning_journal'}
 
 
-@view_config(route_name='create', renderer='templates/new-entry.jinja2')
+@view_config(route_name='create', renderer='templates/new-entry.jinja2', permission='view')
 def create(request):
     return {'poject': 'learning_journal'}
 
 
-@view_config(route_name='update', renderer='templates/edit-entry.jinja2')
-@view_config(route_name='detail', renderer='templates/single-entry.jinja2')
+@view_config(route_name='update', renderer='templates/edit-entry.jinja2', permission='view')
+@view_config(route_name='detail', renderer='templates/single-entry.jinja2', permission='view')
 def detail(request):
     try:
         query = request.dbsession.query(MyModel)
