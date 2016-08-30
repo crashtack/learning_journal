@@ -5,7 +5,7 @@ import time
 from sqlalchemy.exc import DBAPIError
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
-from test_transactions.security import check_credentials
+from ..security import check_credentials
 from pyramid.security import NO_PERMISSION_REQUIRED
 
 from ..models import MyModel
@@ -50,7 +50,7 @@ def private(request):
     return "I am a private view"
 
 
-@view_config(route_name='login', renderer='tmplates/login.hinja2', permission=NO_PERMISSION_REQUIRED)
+@view_config(route_name='login', renderer='templates/login.jinja2', permission=NO_PERMISSION_REQUIRED)
 def login(request):
     if request.method == 'POST':
         username = request.params.get('username', '')
@@ -61,11 +61,10 @@ def login(request):
     return {}
 
 
-@view_config(route_name='logout', renderer='tmplates/login.hinja2')
+@view_config(route_name='logout')
 def logout(request):
     headers = forget(request)
     return HTTPFound(request.route_url('home'), headers=headers)
-
 
 
 # TODO: Add a function that handles the POST request.
@@ -97,13 +96,13 @@ def home(request):
     return {'entries': all_entries, 'poject': 'learning_journal'}
 
 
-@view_config(route_name='create', renderer='templates/new-entry.jinja2', permission='view')
+@view_config(route_name='create', renderer='templates/new-entry.jinja2', permission='secret')
 def create(request):
     return {'poject': 'learning_journal'}
 
 
 @view_config(route_name='update', renderer='templates/edit-entry.jinja2', permission='view')
-@view_config(route_name='detail', renderer='templates/single-entry.jinja2', permission='view')
+@view_config(route_name='detail', renderer='templates/single-entry.jinja2', permission='secret')
 def detail(request):
     try:
         query = request.dbsession.query(MyModel)
