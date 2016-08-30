@@ -32,18 +32,12 @@ ENTRIES = [
         "date": "August 28, 2016",
         "body": "Today I figured out how to deploy a postgresql database to Heroku",
     },
-    # {
-    #     "title": "Day 4",
-    #     "id": 4,
-    #     "date": "August 23, 2016",
-    #     "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
-    # },
-    # {
-    #     "title": "Day 5",
-    #     "id": 5,
-    #     "date": "August 24, 2016",
-    #     "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
-    # },
+    {
+        "title": "Day 4",
+        "id": 4,
+        "date": "August 23, 2016",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
+    },
 ]
 
 
@@ -71,11 +65,10 @@ def logout(request):
 
 # TODO: test the routes
 # TODO: add if request.method == 'DELETE':
-# TODO: added an date_last_updated field
+# TODO: added an date_last_updated field if it is different from creation date
 @view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
 def home(request):
     try:
-        # import pdb; pdb.set_trace()
         query = request.dbsession.query(MyModel)
         all_entries = query.order_by(desc(MyModel.date)).all()
     except DBAPIError:
@@ -83,13 +76,11 @@ def home(request):
     return {'entries': all_entries}
 
 
-# TODO: update view to take in the title, body, error and display properly
-#       if the user entered a body, but no title we want the body to show
-#       with a message to input a Title.
 @view_config(route_name='create',
              renderer='templates/new-entry.jinja2',
              permission='secret')
 def create(request):
+    '''handles the POST request to create a new entry'''
     title = body = error = ''
 
     if request.method == 'POST':
@@ -111,7 +102,6 @@ def create(request):
     return {'title': title, 'body': body, 'error': error}
 
 
-# TODO: refactor this so it works, it's currently unfinished
 @view_config(route_name='update', renderer='templates/edit-entry.jinja2', permission='view')
 @view_config(route_name='detail', renderer='templates/single-entry.jinja2', permission='secret')
 def detail(request):
@@ -123,7 +113,6 @@ def detail(request):
         if request.method == 'POST':
             single_entry.title = request.POST['title']
             single_entry.body = request.POST['body']
-            # single_entry.date_last_updated = datetime.datetime.now()
             return HTTPFound(location=request.route_url('home'))
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
