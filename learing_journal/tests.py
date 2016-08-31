@@ -2,6 +2,7 @@ import pytest
 import transaction
 import datetime
 from pyramid import testing
+from pyramid.httpexceptions import HTTPFound
 
 from .models.mymodel import Journal
 from .models import get_engine
@@ -105,22 +106,32 @@ def test_lists_date(new_session):
     from .views.default import home
     new_session.add(Journal(title='test1', body='test2',
                     date=datetime.datetime.strptime('August 23, 2016', '%B %d, %Y')))
-    datetime.datetime.strptime('August 23, 2016', '%B %d, %Y')
     new_session.flush()
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
         assert entry.date.strftime('%B %d, %Y') == 'August 23, 2016'
 
 
-def test_create(new_session):
+def test_create_get(new_session):
     """
-    Tests whether create() returns  {'poject': 'learning_journal'}
+    Tests whether create() returns  {'title': '', 'body': '', 'error': ''}
     on 'GET' request.
     """
     from .views.default import create
     assert create(dummy_http_request(new_session)) == \
         {'title': '', 'body': '', 'error': ''}
 
+# causes: ../lib/python3.5/site-packages/zope/interface/registry.py:172: ComponentLookupError
+# def test_create_post(new_session):
+#     """
+#     Tests whether create() returns  HTTPFound on 'POST' request.
+#     """
+#     from .views.default import create
+#     # new_session.add(Journal(title='test1', body='test2',
+#     #                 date=datetime.datetime.strptime('August 23, 2016', '%B %d, %Y')))
+#     new_session.flush()
+#     with pytest.raises(HTTPFound):
+#         create(dummy_http_request_post('test1', 'test2', datetime.datetime.strptime('August 23, 2016', '%B %d, %Y'), new_session))
 
 
 def test_add_new_model(new_session):
