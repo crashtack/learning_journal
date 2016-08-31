@@ -8,7 +8,7 @@
       <hr>
       {% for entry in entries %}
           <article>
-              <h3><a href="{{request.route_url('detail',id=entry.id)}}">{{ entry.title }}</a></h3>
+              <h2><a href="{{request.route_url('detail',id=entry.id)}}"><bold>{{ entry.title }}</bold></a></h2>
               <!-- <hr /> -->
               <!-- <h4>Title: <strong>{{ entry.title}}</strong></h4> -->
               <h5>Created: <strong>{{ entry.date.strftime('%B %d, %Y') }}</strong></h5>
