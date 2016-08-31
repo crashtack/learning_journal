@@ -3,7 +3,7 @@ import transaction
 
 from pyramid import testing
 
-from .models.mymodel import MyModel
+from .models.mymodel import Journal
 from .models import get_engine
 from .models import get_session_factory
 from .models import get_tm_session
@@ -42,23 +42,23 @@ def new_session(sqlengine, request):
 
 
 def test_model_gets_added(new_session):
-    assert len(new_session.query(MyModel).all()) == 0
-    model = MyModel(title="test", body='some text')
+    assert len(new_session.query(Journal).all()) == 0
+    model = Journal(title="test", body='some text')
     new_session.add(model)
     new_session.flush()
-    assert len(new_session.query(MyModel).all()) == 1
+    assert len(new_session.query(Journal).all()) == 1
 
 
 def test_model_gets_added_2(new_session):
     """Test the creation of 2 new models in the row."""
-    assert len(new_session.query(MyModel).all()) == 0
-    model = MyModel(title="test_day", body="test_body")
+    assert len(new_session.query(Journal).all()) == 0
+    model = Journal(title="test_day", body="test_body")
     new_session.add(model)
     new_session.flush()
-    model = MyModel(title="test_day2", body="test_body2")
+    model = Journal(title="test_day2", body="test_body2")
     new_session.add(model)
     new_session.flush()
-    assert len(new_session.query(MyModel).all()) == 2
+    assert len(new_session.query(Journal).all()) == 2
 
 
 # Testing the views
@@ -83,7 +83,7 @@ def dummy_http_request_post(title, body, date, new_session):
 def test_lists_title(new_session):
     '''tests wether list() pull out correct data from db'''
     from .views.default import home
-    new_session.add(MyModel(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2', date='test3'))
     new_session.flush()
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
@@ -93,7 +93,7 @@ def test_lists_title(new_session):
 def test_lists_body(new_session):
     '''tests wether list() pull out correct data from db'''
     from .views.default import home
-    new_session.add(MyModel(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2', date='test3'))
     new_session.flush()
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
@@ -103,7 +103,7 @@ def test_lists_body(new_session):
 def test_lists_date(new_session):
     '''tests wether list() pull out correct data from db'''
     from .views.default import home
-    new_session.add(MyModel(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2', date='test3'))
     new_session.flush()
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
@@ -145,7 +145,7 @@ def test_create_error(new_session):
 def test_detail_get(new_session):
     """Test if correct details are returned upon calling detail()."""
     from .views.default import detail
-    new_session.add(MyModel(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2', date='test3'))
     new_session.flush()
     request = dummy_http_request(new_session)
     request.matchdict['id'] = 1

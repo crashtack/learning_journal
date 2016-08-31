@@ -10,7 +10,7 @@ from pyramid.security import remember, forget
 from ..security import check_credentials
 from pyramid.security import NO_PERMISSION_REQUIRED
 
-from ..models import MyModel
+from ..models import Journal
 
 
 ENTRIES = [
@@ -65,12 +65,11 @@ def logout(request):
 
 # TODO: test the routes
 # TODO: add if request.method == 'DELETE':
-# TODO: add an date_last_updated field if it is different from creation date
 @view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
 def home(request):
     try:
-        query = request.dbsession.query(MyModel)
-        all_entries = query.order_by(desc(MyModel.date)).all()
+        query = request.dbsession.query(Journal)
+        all_entries = query.order_by(desc(Journal.date)).all()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'entries': all_entries}
@@ -92,7 +91,7 @@ def create(request):
         if title != '' and body != '':
             date = datetime.datetime.now()
             date_last_updated = datetime.datetime.now()
-            new = MyModel(title=title, body=body, date=date,
+            new = Journal(title=title, body=body, date=date,
                           date_last_updated=date_last_updated)
             request.dbsession.add(new)
             return HTTPFound(location=request.route_url('home'))
@@ -108,7 +107,7 @@ def detail(request):
     '''handles the GET and POST method for edit-entry and single-entry'''
 
     try:
-        query = request.dbsession.query(MyModel)
+        query = request.dbsession.query(Journal)
         single_entry = query.filter_by(id=request.matchdict['id']).first()
         if request.method == 'POST':
             single_entry.title = request.POST['title']
