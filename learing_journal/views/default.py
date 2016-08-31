@@ -65,7 +65,7 @@ def logout(request):
 
 # TODO: test the routes
 # TODO: add if request.method == 'DELETE':
-# TODO: added an date_last_updated field if it is different from creation date
+# TODO: add an date_last_updated field if it is different from creation date
 @view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
 def home(request):
     try:
