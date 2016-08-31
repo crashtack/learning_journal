@@ -11,5 +11,6 @@ def main(global_config, **settings):
     config.include('.security')
     config.include('.models')
     config.include('.routes')
+    config.add_static_view(name='static', path='learing_journal:static')
     config.scan()
     return config.make_wsgi_app()

@@ -1,5 +1,9 @@
 body {
   min-height: 2000px;
+  /*color: red;*/
+  font-family: Verdana, sans-serif;
+  color: #333333;
+
 }
 
 .navbar-static-top {
