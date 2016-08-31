@@ -16,27 +16,27 @@ from ..models import Journal
 ENTRIES = [
     {
         "title": "Day 1",
-        "id": 4,
+        "id": 20,
         "date": "August 20, 2016",
         "body": "Today I learned about <strong>Pyramid</strong>."
     },
     {
         "title": "Day 2",
-        "id": 2,
+        "id": 21,
         "date": "August 21, 2016",
         "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
     },
     {
         "title": "Day 3",
-        "id": 3,
+        "id": 22,
         "date": "August 28, 2016",
         "body": "Today I figured out how to deploy a postgresql database to Heroku",
     },
     {
-        "title": "Day 4",
-        "id": 4,
-        "date": "August 23, 2016",
-        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Curabitur sodales ligula in libero."
+        "title": "Day 4: Yum Bacon",
+        "id": 23,
+        "date": "August 23, 2017",
+        "body": "Anim cupidatat ham hamburger short ribs. Enim do hamburger, tenderloin turducken incididunt shankle aliquip reprehenderit turkey capicola. Minim deserunt swine, eiusmod consequat veniam commodo jerky andouille reprehenderit kevin pariatur adipisicing quis. Aute salami kevin sint chicken ut.",
     },
 ]
 
