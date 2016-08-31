@@ -1,6 +1,6 @@
 import pytest
 import transaction
-
+import datetime
 from pyramid import testing
 
 from .models.mymodel import Journal
@@ -83,7 +83,7 @@ def dummy_http_request_post(title, body, date, new_session):
 def test_lists_title(new_session):
     '''tests wether list() pull out correct data from db'''
     from .views.default import home
-    new_session.add(Journal(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2', date=datetime.datetime.now()))
     new_session.flush()
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
@@ -93,7 +93,7 @@ def test_lists_title(new_session):
 def test_lists_body(new_session):
     '''tests wether list() pull out correct data from db'''
     from .views.default import home
-    new_session.add(Journal(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2', date=datetime.datetime.now()))
     new_session.flush()
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
@@ -103,11 +103,13 @@ def test_lists_body(new_session):
 def test_lists_date(new_session):
     '''tests wether list() pull out correct data from db'''
     from .views.default import home
-    new_session.add(Journal(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2',
+                    date=datetime.datetime.strptime('August 23, 2016', '%B %d, %Y')))
+    datetime.datetime.strptime('August 23, 2016', '%B %d, %Y')
     new_session.flush()
     result = home(dummy_http_request(new_session))
     for entry in result['entries']:
-        assert entry.date == 'test3'
+        assert entry.date.strftime('%B %d, %Y') == 'August 23, 2016'
 
 
 def test_create(new_session):
@@ -117,7 +119,8 @@ def test_create(new_session):
     """
     from .views.default import create
     assert create(dummy_http_request(new_session)) == \
-        {'poject': 'learning_journal'}
+        {'title': '', 'body': '', 'error': ''}
+
 
 
 def test_add_new_model(new_session):
@@ -137,15 +140,15 @@ def test_create_error(new_session):
     Test if an error msg shows up on the page
     in case an empty entry on the new_entry page is submitted.
     """
-    from .views.default import home
-    result = home(dummy_http_request_post('', '', '', new_session))
-    assert result['error_msg'] == "Can't submit empry entry"
+    from .views.default import create
+    result = create(dummy_http_request_post('', '', '', new_session))
+    assert result['error'] == "You are missing the Title or the Body"
 
 
 def test_detail_get(new_session):
     """Test if correct details are returned upon calling detail()."""
     from .views.default import detail
-    new_session.add(Journal(title='test1', body='test2', date='test3'))
+    new_session.add(Journal(title='test1', body='test2', date=datetime.datetime.now()))
     new_session.flush()
     request = dummy_http_request(new_session)
     request.matchdict['id'] = 1

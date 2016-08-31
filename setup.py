@@ -29,7 +29,8 @@ tests_require = [
     'pytest-cov',
     'pytest-watch',
     'tox',
-    ]
+    'passlib',
+]
 
 setup(name='learing_journal',
       version='0.0',
