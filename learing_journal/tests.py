@@ -43,18 +43,18 @@ def new_session(sqlengine, request):
 
 
 @pytest.fixture(scope="function")
-def populated_db(request, sqleingin):
+def populated_db(request, sqlengine):
     '''sets up and populates a Data Base for the duration for the test function'''
     session_factory = get_session_factory(sqlengine)
     session = get_tm_session(session_factory, transaction.manager)
 
     with transaction.manager:
-        session.add(Entry(title='title: Day 1', body='Thi is a body',
-                          date=datetime.datetime.now()))
+        session.add(Journal(title='title: Day 1', body='Thi is a body',
+                            date=datetime.datetime.now()))
 
     def teardown():
         with transaction.manager:
-            session.query(Entry).delete()
+            session.query(Journal).delete()
 
     request.addfinalizer(teardown)
 
@@ -201,14 +201,14 @@ def test_detail_get(new_session):
 #
 
 
-# settings = {'sqlalchemy.url': 'sqlite:///:memory:'}
+DB_SETTINGS = {'sqlalchemy.url': 'sqlite:///:memory:'}
 
 
 @pytest.fixture()
 def testapp():
     '''testapp fixture'''
     from learing_journal import main
-    app = main({}, {'sqlalchemy.url': 'sqlite:///:memory:'})
+    app = main({}, **DB_SETTINGS)
     from webtest import TestApp
     return TestApp(app)
 
@@ -216,6 +216,7 @@ def testapp():
 def test_template_home(testapp, populated_db):
     '''tests the home '/' route'''
     response = testapp.get('/', status=200)
+    print('\n\nBody: {}'.format(response.body))
     assert b'title: Day 1' in response.body
 
 #
