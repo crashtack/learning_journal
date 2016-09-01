@@ -4,14 +4,16 @@
   <div class="jumbotron">
     <h2>Login</h2>
     <form action="" method="POST">
-    <div class="field">
+      <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}"/>
+
+      <div class="field">
         <label for="username">Username</label>
         <input type="text" name="username" id="username"/>
-    </div>
-    <div class="field">
+      </div>
+      <div class="field">
         <label for="password">Password</label>
         <input type="password" name="password" id="password"/>
-    </div>
+     </div>
     <div class="control_row">
         <input type="submit" name="Login" value="Login"/>
     </div>

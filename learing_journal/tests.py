@@ -42,6 +42,22 @@ def new_session(sqlengine, request):
     return session
 
 
+@pytest.fixture(scope="function")
+def populated_db(request, sqleingin):
+    '''sets up and populates a Data Base for the duration for the test function'''
+    session_factory = get_session_factory(sqlengine)
+    session = get_tm_session(session_factory, transaction.manager)
+
+    with transaction.manager:
+        session.add(Entry(title='title: Day 1', body='Thi is a body',
+                          date=datetime.datetime.now()))
+
+    def teardown():
+        with transaction.manager:
+            session.query(Entry).delete()
+
+    request.addfinalizer(teardown)
+
 def test_model_gets_added(new_session):
     assert len(new_session.query(Journal).all()) == 0
     model = Journal(title="test", body='some text')
@@ -183,14 +199,25 @@ def test_detail_get(new_session):
 # ]
 #
 #
-# @pytest.fixture()
-# def testapp():
-#     '''testapp fixture'''
-#     from learing_journal import main
-#     app = main({})
-#     from webtest import TestApp
-#     return TestApp(app)
-#
+
+
+# settings = {'sqlalchemy.url': 'sqlite:///:memory:'}
+
+
+@pytest.fixture()
+def testapp():
+    '''testapp fixture'''
+    from learing_journal import main
+    app = main({}, {'sqlalchemy.url': 'sqlite:///:memory:'})
+    from webtest import TestApp
+    return TestApp(app)
+
+
+def test_template_home(testapp, populated_db):
+    '''tests the home '/' route'''
+    response = testapp.get('/', status=200)
+    assert b'title: Day 1' in response.body
+
 #
 # @pytest.mark.parametrize('path, content', ROUTES)
 # def test_rendered_layouts(path, content, testapp):
