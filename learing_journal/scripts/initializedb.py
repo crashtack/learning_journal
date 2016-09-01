@@ -40,16 +40,16 @@ def main(argv=sys.argv):
 
     # The below lines populates the database initialy
 
-    session_factory = get_session_factory(engine)
-
-    with transaction.manager:
-        dbsession = get_tm_session(session_factory, transaction.manager)
-        for entry in ENTRIES:
-            # intdented like this so the linter stopped complaining
-            row = Journal(title=entry['title'], body=entry['body'],
-                          date=datetime.datetime.strptime(entry['date'],
-                                                          '%B %d, %Y'),
-                          date_last_updated=datetime.datetime.strptime(
-                          entry['date'], '%B %d, %Y'),
-                          id=entry['id'])
-            dbsession.add(row)
+    # session_factory = get_session_factory(engine)
+    #
+    # with transaction.manager:
+    #     dbsession = get_tm_session(session_factory, transaction.manager)
+    #     for entry in ENTRIES:
+    #         # intdented like this so the linter stopped complaining
+    #         row = Journal(title=entry['title'], body=entry['body'],
+    #                       date=datetime.datetime.strptime(entry['date'],
+    #                                                       '%B %d, %Y'),
+    #                       date_last_updated=datetime.datetime.strptime(
+    #                       entry['date'], '%B %d, %Y'),
+    #                       id=entry['id'])
+    #         dbsession.add(row)

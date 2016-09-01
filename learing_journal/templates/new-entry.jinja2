@@ -10,6 +10,7 @@
       <div class="alert alert-danger" role="alert">{{ error }}</div>
     {% endif %}
     <form action="{{ request.route_url('create') }}" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}"/>
       <label for="title">New Journal Title</label><br/>
       <textarea class="form-control" rows="1" maxlength="100" id="title" name="title" placeholder="Enter Journal Title">{{ title | safe }}</textarea>
       <br/>
