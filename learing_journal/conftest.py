@@ -18,13 +18,13 @@ def app():
     return TestApp(app)
 
 
-PASSWORD = 'secret_password'
+PASSWORD = 'secret password'
 ENCRYPTED_PASSWORD = pwd_context.encrypt(PASSWORD)
 
 
 @pytest.fixture(scope='function')
 def auth_env():
-    username = 'billy'
+    username = 'banksd'
     os.environ['AUTH_USERNAME'] = username
     os.environ['AUTH_PASSWORD'] = ENCRYPTED_PASSWORD
 
@@ -32,9 +32,20 @@ def auth_env():
 
 
 @pytest.fixture(scope="function")
-def authenticated_app():
+def authenticated_app(app_and_csrf_token, auth_env):
+    app, token = app_and_csrf_token
     actual_username, actual_password = auth_env
-    auth_data = {'username': actual_username, 'password': actual_password}
+    auth_data = {'username': actual_username,
+                 'password': actual_password,
+                 'csrf_token': token}
     response = app.post('/login', auth_data, status='3*')
 
     return app
+
+@pytest.fixture(scope='function')
+def app_and_csrf_token(app):
+    response = app.get('/login')
+    # import pdb; pdb.set_trace()
+    input_ = response.html.find('input', attrs={'name': 'csrf_token'})
+    token = input_.attrs['value']
+    return app, token

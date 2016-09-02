@@ -7,11 +7,13 @@
     <p>{{ single_entry.date.strftime('%B %d, %Y') }}</p>
     <hr>
     <p>{{ single_entry.body | safe }}</P>
+    {% if request.authenticated_userid %}
     <h2>
       <a href='{{request.route_url('update',id=single_entry.id)}}'>
         <button class="btn btn-default"><h3>Edit Entry</h3></button>
       </a>
     </h2>
+    {% endif %}
   </div>
 
 {% endblock %}

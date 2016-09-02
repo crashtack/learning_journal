@@ -26,6 +26,8 @@ def includeme(config):
     authn_policy = AuthTktAuthenticationPolicy(
         secret=auth_secret,
         hashalg='sha512'
+        # TODO:
+        # can include expire arguments max_age??
     )
     config.set_authentication_policy(authn_policy)
     # add the following new lines of configuration and the new import above.
