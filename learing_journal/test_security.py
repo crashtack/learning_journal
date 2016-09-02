@@ -3,7 +3,6 @@
     from Cris Ewing September 1, 2016
 '''
 import os
-import pytest
 from pyramid import testing
 
 
@@ -73,16 +72,18 @@ def test_login_view_get_succeeds(app):
     # import pdb: pdb.set_trace() # csrt
     assert response.status_code == 200
 
-# Figure out CSRF
-# def test_post_login_view_redirects_on_success(app, auth_env):
-#     actual_username, actual_password = auth_env
-#     auth_data = {
-#         'username': actual_username,
-#         'password': actual_password,
-#         'csrf_token': 'e66aa47a99d3544fdc59133e6002a7e368d21e6f',
-#     }
-#     response = app.post('/login', auth_data, status='3*')
-#     assert response.status_code == 302
+
+# Figuring out CSRF
+def test_post_login_view_redirects_on_success(app_and_csrf_token, auth_env):
+    app, token = app_and_csrf_token
+    actual_username, actual_password = auth_env
+    auth_data = {
+        'username': actual_username,
+        'password': actual_password,
+        'csrf_token': token,
+    }
+    response = app.post('/login', auth_data, status='3*')
+    assert response.status_code == 302
 
 
 def test_post_login_view_has_auth_tkt_cookie(app_and_csrf_token, auth_env):

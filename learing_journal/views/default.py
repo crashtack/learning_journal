@@ -50,28 +50,11 @@ def private(request):
 def public(request):
     return "I am a private view"
 
-###########################################
-# Writen during class, DELETE, check against currently implemented version
-# TODO: if there is a login failure give a message, and stay here
-@view_config(route_name='login2', renderer='templates/login.jinja2', permission=NO_PERMISSION_REQUIRED)
-def login2(request):
-    if request.method == 'POST':
-        # username = request.POST.get('username')
-        # password = request.POST.get('passord')
-        username = request.params.get('username', '')
-        password = request.params.get('password', '')
-        if check_credentials(username, password):
-            headers = remember(request, username)
-            return HTTPFound(location=request.route_url('home'), headers=headers)
-    return {}
-###########################################
 
 # TODO: if there is a login failure give a message, and stay here
 @view_config(route_name='login', renderer='templates/login.jinja2', permission=NO_PERMISSION_REQUIRED)
 def login(request):
     if request.method == 'POST':
-        # username = request.POST.get('username')
-        # password = request.POST.get('passord')
         username = request.params.get('username', '')
         password = request.params.get('password', '')
         if check_credentials(username, password):
