@@ -5,7 +5,9 @@
     <h2>Login</h2>
     <form action="" method="POST">
       <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}"/>
-
+      {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+      {% endif %}
       <div class="field">
         <label for="username">Username</label>
         <input type="text" name="username" id="username"/>
