@@ -9,7 +9,6 @@ from pyramid.session import SignedCookieSessionFactory
 
 
 class MyRoot(object):
-    '''custom root provides app-level permissions'''
 
     def __init__(self, request):
         self.request = request
@@ -51,4 +50,16 @@ def check_credentials(username, password):
             except ValueError:
                 # ValueError is rased if teh stored password is not hashed
                 pass
+    return is_authenticated
+
+# Writen during lecture
+def check_credentials2(username, password):
+    stored_username = os.environ.get('AUTH_USERNAME')
+    stored_password = os.environ.get('AUTH_PASSWORD')
+    is_authenticated = False
+    if username == stored_username:
+        try:
+            is_authenticated = pwd_context.verify(password, stored_password)
+        except ValueError:
+            pass
     return is_authenticated
