@@ -58,6 +58,7 @@ def populated_db(request, sqlengine):
 
     request.addfinalizer(teardown)
 
+
 def test_model_gets_added(new_session):
     assert len(new_session.query(Journal).all()) == 0
     model = Journal(title="test", body='some text')
@@ -137,18 +138,6 @@ def test_create_get(new_session):
     assert create(dummy_http_request(new_session)) == \
         {'title': '', 'body': '', 'error': ''}
 
-# causes: ../lib/python3.5/site-packages/zope/interface/registry.py:172: ComponentLookupError
-# def test_create_post(new_session):
-#     """
-#     Tests whether create() returns  HTTPFound on 'POST' request.
-#     """
-#     from .views.default import create
-#     # new_session.add(Journal(title='test1', body='test2',
-#     #                 date=datetime.datetime.strptime('August 23, 2016', '%B %d, %Y')))
-#     new_session.flush()
-#     with pytest.raises(HTTPFound):
-#         create(dummy_http_request_post('test1', 'test2', datetime.datetime.strptime('August 23, 2016', '%B %d, %Y'), new_session))
-
 
 def test_add_new_model(new_session):
     """
@@ -185,20 +174,22 @@ def test_detail_get(new_session):
 
 # Testing the templates
 # doen't work
-# ROUTES = [
-#     ('/', b'<p>David Banks</p>'),
-#     # ('/journal/new-entry', b'<h1>new-entry.jinja2</h1>'),
-#     # ('/journal/1', b'<h1>Day 1</h1>'),
-#     # ('/journal/2', b'<h1>Day 2</h1>'),
-#     # ('/journal/3', b'<h1>Day 3</h1>'),
-#     # ('/journal/4', b'<h1>Day 4</h1>'),
-#     # ('/journal/1/edit-entry', b'Entry ID: 1'),
-#     # ('/journal/2/edit-entry', b'Entry ID: 2'),
-#     # ('/journal/3/edit-entry', b'Entry ID: 3'),
-#     # ('/journal/4/edit-entry', b'Entry ID: 4'),
-# ]
-#
-#
+from .views.default import ENTRIES
+ROUTES = [
+    ('/', b'<h2>The list view points here! home.html</h2>'),
+    # ('/journal/new-entry', b'<h1>new-entry.jinja2</h1>'),
+    ('/journal/' + str(ENTRIES[0]['id']), ENTRIES[0]['title'].encode('utf-8')),
+    ('/journal/' + str(ENTRIES[1]['id']), ENTRIES[1]['title'].encode('utf-8')),
+    ('/journal/' + str(ENTRIES[2]['id']), ENTRIES[2]['title'].encode('utf-8')),
+    ('/journal/' + str(ENTRIES[3]['id']), ENTRIES[3]['title'].encode('utf-8')),
+    ('/journal/' + str(ENTRIES[0]['id']), ENTRIES[0]['title'].encode('utf-8')),
+    # ('/journal/1/edit-entry', b'Entry ID: 1'),
+    # ('/journal/2/edit-entry', b'Entry ID: 2'),
+    # ('/journal/3/edit-entry', b'Entry ID: 3'),
+    # ('/journal/4/edit-entry', b'Entry ID: 4'),
+]
+
+
 
 
 DB_SETTINGS = {'sqlalchemy.url': 'sqlite:///:memory:'}
@@ -213,17 +204,27 @@ def testapp():
     return TestApp(app)
 
 
-def test_template_home(testapp, populated_db):
+def test_template_home(testapp):
     '''tests the home '/' route'''
     response = testapp.get('/', status=200)
+    # import pdb; pdb.set_trace()
     print('\n\nBody: {}'.format(response.body))
-    assert b'title: Day 1' in response.body
+    assert b'<strong>Day 2</strong>' in response.body
 
-#
+
+
+@pytest.mark.parametrize('path, content', ROUTES)
+def test_rendered_layouts(path, content, authenticated_app):
+    '''tests that a particular HTML binary string is in the response body'''
+    response = authenticated_app.get(path, status=200)
+    # import pdb; pdb.set_trace()
+    assert content in response.body
+
 # @pytest.mark.parametrize('path, content', ROUTES)
-# def test_rendered_layouts(path, content, testapp):
+# def test_rendered_layouts2(path, content, testapp):
 #     '''tests that a particular HTML binary string is in the response body'''
 #     response = testapp.get(path, status=200)
+#     # import pdb; pdb.set_trace()
 #     assert content in response.body
 
 #

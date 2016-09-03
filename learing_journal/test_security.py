@@ -33,22 +33,22 @@ def test_create_view_accessible_to_authenticated(authenticated_app):
 
 
 def test_update_view_inaccessable(app):
-    response = app.get('/journal/20/edit-entry', status='4*')
+    response = app.get('/journal/1/edit-entry', status='4*')
     assert response.status_code == 403
 
 
 def test_update_view_accessible_to_authenticated(authenticated_app):
-    response = authenticated_app.get('/journal/20/edit-entry', status='2*')
+    response = authenticated_app.get('/journal/1/edit-entry', status='2*')
     assert response.status_code == 200
 
 
 def test_detail_view_inaccessable(app):
-    response = app.get('/journal/20', status='4*')
+    response = app.get('/journal/1', status='4*')
     assert response.status_code == 403
 
 
 def test_detail_view_accessible_to_authenticated(authenticated_app):
-    response = authenticated_app.get('/journal/20', status='2*')
+    response = authenticated_app.get('/journal/1', status='2*')
     assert response.status_code == 200
 
 

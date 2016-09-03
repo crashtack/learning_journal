@@ -114,7 +114,7 @@ def create(request):
 @view_config(route_name='detail', renderer='templates/single-entry.jinja2', permission='secret')
 def detail(request):
     '''handles the GET and POST method for edit-entry and single-entry'''
-
+    # import pdb; pdb.set_trace()
     try:
         query = request.dbsession.query(Journal)
         single_entry = query.filter_by(id=request.matchdict['id']).first()
