@@ -65,8 +65,8 @@ def populated_db(request, sqlengine):
 
 
 DB_SETTINGS2 = {'sqlalchemy.url': 'sqlite:///:memory:'}
-# DB_SETTINGS2 = {'DATABASE_URL': 'sqlalchemy.url: postgres://banksd:@localhost:5432/learing_journal'}
-
+# DB_SETTINGS2 = {'sqlalchemy.url': 'postgres://banksd:@localhost:5432/learing_journal'}
+sqlalchemy.url
 
 # app
 @pytest.fixture()
