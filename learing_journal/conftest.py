@@ -104,7 +104,6 @@ def authenticated_app(app_and_csrf_token, auth_env):
 @pytest.fixture(scope='function')
 def app_and_csrf_token(app):
     response = app.get('/login')
-    # import pdb; pdb.set_trace()
     input_ = response.html.find('input', attrs={'name': 'csrf_token'})
     token = input_.attrs['value']
     return app, token

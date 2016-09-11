@@ -74,7 +74,8 @@ def logout(request):
 
 # TODO: test the routes
 # TODO: add if request.method == 'DELETE':
-@view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
+@view_config(route_name='home', renderer='templates/home.jinja2',
+             permission='view')
 def home(request):
     try:
         query = request.dbsession.query(Journal)
@@ -110,11 +111,12 @@ def create(request):
     return {'title': title, 'body': body, 'error': error}
 
 
-@view_config(route_name='update', renderer='templates/edit-entry.jinja2', permission='secret')
-@view_config(route_name='detail', renderer='templates/single-entry.jinja2', permission='secret')
+@view_config(route_name='update', renderer='templates/edit-entry.jinja2',
+             permission='secret')
+@view_config(route_name='detail', renderer='templates/single-entry.jinja2',
+             permission='secret')
 def detail(request):
     '''handles the GET and POST method for edit-entry and single-entry'''
-    # import pdb; pdb.set_trace()
     try:
         query = request.dbsession.query(Journal)
         single_entry = query.filter_by(id=request.matchdict['id']).first()
