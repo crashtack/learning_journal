@@ -172,46 +172,7 @@ def test_detail_get(new_session):
     assert result['single_entry'].title == 'test1'
 
 
-# Testing the templates
-# doen't work
-from .views.default import ENTRIES
-ROUTES = [
-    ('/', b'<h2>The list view points here! home.html</h2>'),
-    # ('/journal/new-entry', b'<h1>new-entry.jinja2</h1>'),
-    ('/journal/' + str(ENTRIES[0]['id']), ENTRIES[0]['title'].encode('utf-8')),
-    ('/journal/' + str(ENTRIES[1]['id']), ENTRIES[1]['title'].encode('utf-8')),
-    ('/journal/' + str(ENTRIES[2]['id']), ENTRIES[2]['title'].encode('utf-8')),
-    ('/journal/' + str(ENTRIES[3]['id']), ENTRIES[3]['title'].encode('utf-8')),
-    ('/journal/' + str(ENTRIES[0]['id']), ENTRIES[0]['title'].encode('utf-8')),
-    # ('/journal/1/edit-entry', b'Entry ID: 1'),
-    # ('/journal/2/edit-entry', b'Entry ID: 2'),
-    # ('/journal/3/edit-entry', b'Entry ID: 3'),
-    # ('/journal/4/edit-entry', b'Entry ID: 4'),
-]
-
-
 def test_template_home(app, populated_db):
     '''tests the home '/' route'''
     response = app.get('/', status=200)
     assert b'Day 1' in response.body
-
-
-@pytest.mark.parametrize('path, content', ROUTES)
-def test_rendered_layouts(path, content, authenticated_app):
-    '''tests that a particular HTML binary string is in the response body'''
-    response = authenticated_app.get(path, status=200)
-    # import pdb; pdb.set_trace()
-    assert content in response.body
-
-# @pytest.mark.parametrize('path, content', ROUTES)
-# def test_rendered_layouts2(path, content, testapp):
-#     '''tests that a particular HTML binary string is in the response body'''
-#     response = testapp.get(path, status=200)
-#     # import pdb; pdb.set_trace()
-#     assert content in response.body
-
-#
-#
-#
-#
-#
