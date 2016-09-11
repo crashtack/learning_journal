@@ -23,7 +23,7 @@ learing_journal/views/default.py             62     22    65%   46, 51-57, 62-63
 * congratulations :)
 
 # step 6 (security and CSRF implementation)
-'''
+```
 -----------------------------------------------------------------------------
 learing_journal/__init__.py                        13      1    92%   9
 learing_journal/conftest.py                        66      0   100%
@@ -47,4 +47,4 @@ _________________________________________________ summary ______________________
   py27: commands succeeded
   py35: commands succeeded
   congratulations :)
-'''
+```
