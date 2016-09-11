@@ -2,19 +2,21 @@
 {% block body %}
 
 <div class="jumbotron">
-  <h1>new-entry.jinja2</h1>
+  <h4>new-entry.jinja2</h4>
   <!-- TODO: Wrap the back to home link in a button -->
   <h2><a href='/'>Back to Home</a></h2>
   <div class="form-group">
-    {% if data %}
-    <h1>{{ data.name }}</h1>
+    {% if error %}
+      <div class="alert alert-danger" role="alert">{{ error }}</div>
     {% endif %}
-    <form action="{{ request.route_url('home') }}" method="POST">
+    <form action="{{ request.route_url('create') }}" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}"/>
       <label for="title">New Journal Title</label><br/>
-      <textarea class="form-control" rows="1" maxlength="100" id="title" name="title" placeholder="Enter Journal Title"></textarea>
+      <textarea class="form-control" rows="1" maxlength="100" id="title" name="title" placeholder="Enter Journal Title">{{ title | safe }}</textarea>
       <br/>
       <label for="title">Journal Text</label><br/>
-      <textarea class="form-control" rows="15" id="body" name="body" placeholder="Enter your new journal text."></textarea>
+      <textarea class="form-control" rows="15" id="body" name="body" placeholder="Enter your new journal text.">{{ body | safe }}</textarea>
+      <br/>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
   </div>

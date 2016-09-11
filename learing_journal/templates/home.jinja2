@@ -3,17 +3,22 @@
 
     <div class="jumbotron">
       <h2>The list view points here! home.html</h2>
+      <p>These journal entries are populated from a postgres database. The entries are listed in reverse order by creations date.</p>
+      <br/>
+      <hr>
       {% for entry in entries %}
           <article>
-              <h3><a href="{{request.route_url('detail',id=entry.id)}}">{{ entry.title }}</a></h3>
+              <h2><a href="{{request.route_url('detail',id=entry.id)}}"><bold>{{ entry.title }}</bold></a></h2>
               <!-- <hr /> -->
-              <h5>Created: <strong>{{ entry.date }}</strong></h5>
+              <!-- <h4>Title: <strong>{{ entry.title}}</strong></h4> -->
+              <h5>Created: <strong>{{ entry.date.strftime('%B %d, %Y') }}</strong></h5>
               <p>{{ entry.body | safe }}</p>
               <br/>
           </article>
+          {% if not loop.last %}
+            <hr>
+          {% endif %}
       {% endfor %}
     </dir>
-
-    <h2><a href="{{request.route_url('create')}}">New Entry</a></h2>
 
 {% endblock %}
