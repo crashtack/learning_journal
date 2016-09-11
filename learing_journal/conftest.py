@@ -12,13 +12,18 @@ from .models import get_tm_session
 
 from passlib.apps import custom_app_context as pwd_context
 
+OS_USER = os.environ.get('USER')
+DB_SETTINGS = {
+    'sqlalchemy.url': 'postgres://{}:@localhost:5432/testing'
+    .format(OS_USER)
+}
 
-@pytest.fixture(scope="session")
+
+@pytest.fixture(scope='function')
 def sqlengine(request):
-    config = testing.setUp(settings={
-        'sqlalchemy.url': 'sqlite:///:memory:'
-    })
-    config.include(".models")
+    config = testing.setUp(settings=DB_SETTINGS)
+    config.include('.models')
+    config.testing_securitypolicy(userid='admin', permissive=True)
     settings = config.get_settings()
     engine = get_engine(settings)
     Base.metadata.create_all(engine)
@@ -48,31 +53,25 @@ def new_session(sqlengine, request):
 def populated_db(request, sqlengine):
     '''sets up and populates a Data Base for the duration for the test function'''
     session_factory = get_session_factory(sqlengine)
-    session = get_tm_session(session_factory, transaction.manager)
+    dbsession = get_tm_session(session_factory, transaction.manager)
 
     with transaction.manager:
-        session.add(Journal(title='title: Day 1', body='This is a body',
-                            date=datetime.datetime.now()))
-        session.flush()
+        entry = Journal(title='title: Day 1', body='This is a body',
+                        date=datetime.datetime.now())
+        dbsession.add(entry)
+
     def teardown():
         with transaction.manager:
-            session.query(Journal).delete()
+            dbsession.query(Journal).delete()
 
     request.addfinalizer(teardown)
 
 
-
-
-
-DB_SETTINGS2 = {'sqlalchemy.url': 'sqlite:///:memory:'}
-# DB_SETTINGS2 = {'sqlalchemy.url': 'postgres://banksd:@localhost:5432/learing_journal'}
-
-# app
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def app(new_session):
     '''testapp fixture'''
     from learing_journal import main
-    app = main({}, **DB_SETTINGS2)
+    app = main({}, **DB_SETTINGS)
     from webtest import TestApp
     return TestApp(app)
 
@@ -97,7 +96,7 @@ def authenticated_app(app_and_csrf_token, auth_env):
     auth_data = {'username': actual_username,
                  'password': actual_password,
                  'csrf_token': token}
-    response = app.post('/login', auth_data, status='3*')
+    app.post('/login', auth_data, status='3*')
 
     return app
 
