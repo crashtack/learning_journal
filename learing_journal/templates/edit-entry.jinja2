@@ -1,15 +1,24 @@
-{% extends "layout_new_entry.jinja2" %}
+{% extends "layout.jinja2" %}
 {% block body %}
 
 <div class="jumbotron">
-  <!-- Entry ID: {{ single_entry.id }} -->
-  <h3>edit-entry.jinja2</h3>
-  <h2>Edit Journal Entry {{ single_entry.id }}</h2>
+  <h1>edit-entry.jinja2</h1>
+  <!-- TODO: Wrap the back to home link in a button -->
+  <!-- <h2><a href='/'>Back to Home</a></h2> -->
   <div class="form-group">
-    <label for="comment">Journal Body:</label>
-    <textarea class="form-control" rows="5" id="body">{{ single_entry.body  | safe }}</textarea>
+    <form action="{{ request.route_url('update',id=single_entry.id) }}" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}"/>
+      <label for="title">Title</label><br/>
+      <textarea class="form-control" rows="1" maxlength="100" id="title" name="title">{{ single_entry.title | safe }}</textarea>
+      <br/>
+      <label for="title">Journal Text</label><br/>
+      <textarea class="form-control" rows="15" id="body" name="body">{{ single_entry.body | safe}}</textarea>
+      <br/>
+      <button type="submit" class="btn btn-default">Submit</button>
+      <a href='/'><button class="btn btn-default">Cancel</button></a>
+    </form>
   </div>
-  <h2><a href='/'>Back to Home</a></h2>
+
 </div>
 
 {% endblock %}

@@ -18,7 +18,10 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
-    ]
+    'psycopg2',
+    'ipython',
+    'passlib',
+]
 
 tests_require = [
     'WebTest >= 1.3.1',  # py3 compat
@@ -26,7 +29,8 @@ tests_require = [
     'pytest-cov',
     'pytest-watch',
     'tox',
-    ]
+    'passlib',
+]
 
 setup(name='learing_journal',
       version='0.0',
