@@ -52,3 +52,8 @@ _________________________________________________ summary ______________________
 # Step 7 AJAX and Twitter features
 ##Milestone Created
 ##Issues created and atached to milestone
+
+
+# Step 8 Import Journals via API
+##Created branch
+##Updated README
