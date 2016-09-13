@@ -114,7 +114,7 @@ def create(request):
 @view_config(route_name='update', renderer='templates/edit-entry.jinja2',
              permission='secret')
 @view_config(route_name='detail', renderer='templates/single-entry.jinja2',
-             permission='secret')
+             permission='view')
 def detail(request):
     '''handles the GET and POST method for edit-entry and single-entry'''
     try:

@@ -6,8 +6,8 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     if 'sqlalchemy.url' not in settings:
-        # settings["sqlalchemy.url"] = os.environ["DATABASE_URL"]
-        settings["sqlalchemy.url"] = os.environ["HEROKU_POSTGRESQL_BLUE_URL"]
+        settings["sqlalchemy.url"] = os.environ["DATABASE_URL"]
+        # settings["sqlalchemy.url"] = os.environ["HEROKU_POSTGRESQL_BLUE_URL"]
     config = Configurator(settings=settings)
     config.include('pyramid_jinja2')
     config.include('.security')
