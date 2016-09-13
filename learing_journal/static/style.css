@@ -1,0 +1,50 @@
+body {
+  /*min-height: 2000px;*/
+  /*color: red;*/
+  /*font-family: 'Muli', sans-serif;*/
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 60px;
+  /*font-family: Verdana, sans-serif;*/
+  /*color: blue;*/
+  /*background-color: #adc2eb;*/
+  background-color: #d1e0e0;
+}
+
+.navbar {
+  margin-bottom: 19px;
+  background-color: #b3cccc;
+  color: black;
+  font-size: 1.4em;
+}
+
+.navbar-brand {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: blue;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 30px;
+  background-color: #b3cccc;
+  /*background-color: #f5f5f5;*/
+}
+
+#content {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+p {
+  font-size: 1.4em;
+}
